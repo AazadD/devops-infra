@@ -62,7 +62,7 @@ Step 3: Bootstrap GitOps (Argo CD App-of-Apps)
 Deploy the root application to synchronize all environments and the observability stack:
 
 Bash
-kubectl apply -f [https://raw.githubusercontent.com/AazadD/gitops/main/root-app-of-apps.yaml](https://raw.githubusercontent.com/AazadD/gitops/main/root-app-of-apps.yaml)
+kubectl apply -f https://raw.githubusercontent.com/AazadD/gitops/main/root-app-of-apps.yaml https://raw.githubusercontent.com/AazadD/gitops/main/root-app-of-apps.yaml
 Verify application status:
 
 Bash
