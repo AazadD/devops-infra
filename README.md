@@ -1,4 +1,4 @@
-# DevOps Infrastructure & GitOps Setup Guide
+#  DevOps Infrastructure & GitOps Setup Guide
 
 This repository contains the Terraform infrastructure, Ansible automation, Helm charts, and CI/CD workflow specifications for deploying the microservice application and observability stack via Argo CD.
 
@@ -12,32 +12,42 @@ This repository contains the Terraform infrastructure, Ansible automation, Helm 
 
 ---
 
-## 2. Prerequisites & Tool Installation
+## 2. Application CI/CD Pipeline (GitHub Actions)
 
-Ensure you have an Ubuntu 22.04 LTS system (WSL2, local VM, or cloud EC2 instance). 
+Located at `.github/workflows/ci-cd.yaml` in the **Application Repository**, the automated pipeline handles:
 
-Install the required control tools:
+### Branch & Environment Matrix
+| Git Branch | Target Environment | Image Tag Format | Target GitOps Manifest |
+| :--- | :--- | :--- | :--- |
+| `staging` or `develop` | **Staging** | `staging-<commit-sha>` | `apps/workloads/app-staging.yaml` |
+| `main` or `prod` | **Production** | `production-<commit-sha>` | `apps/workloads/app-production.yaml` |
+
+### Pipeline Flow
+1. **Branch Detection:** Selects the corresponding GitHub Environment (`staging` vs `production`) using unified secret names (`DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`, `GITOPS_PAT`).
+2. **Build & Push:** Builds the Docker container image and pushes it to Docker Hub (`faazad/devops-app:<tag>`).
+3. **Automated GitOps Sync:** Clones `https://github.com/AazadD/gitops`, updates the target environment manifest with the new image tag, commits, and pushes to trigger Argo CD reconciliation.
+
+---
+
+## 3. Prerequisites
+
+- **Terraform** 
+- **Ansible** 
+- **kubectl** & **Helm **
+- Access to an Ubuntu 22.04 LTS host or AWS EC2 instance
+
+- **Terraform** 
+- **Ansible** 
+- **kubectl** & **Helm 
+- Access to an Ubuntu 22.04 LTS server (or AWS EC2 instance)
+
+---
+
+## 4. Setup & Execution Steps
+
+### Step 1: Provision Infrastructure (Terraform)
+Provisions the VPC, subnets, security groups, and compute instance:
 ```bash
-sudo apt update && sudo apt install -y git curl ansible
-(Optional for Cloud IaaS provisioning: Terraform >= 1.5.0)
-
-3. Application CI/CD Pipeline (GitHub Actions)
-Located at .github/workflows/ci-cd.yaml in the Application Repository, the automated pipeline handles:
-
-Branch & Environment Matrix
-Git Branch	Target Environment	Image Tag Format	Target GitOps Manifest
-staging or develop	Staging	staging-<commit-sha>	apps/workloads/app-staging.yaml
-main or prod	Production	production-<commit-sha>	apps/workloads/app-production.yaml
-Pipeline Flow
-Branch Detection: Selects the corresponding GitHub Environment (staging vs production) using unified secret names (DOCKERHUB_USERNAME, DOCKERHUB_TOKEN, GITOPS_PAT).
-
-Build & Push: Builds the Docker container image and pushes it to Docker Hub (faazad/devops-app:<tag>).
-
-Automated GitOps Sync: Clones https://github.com/AazadD/gitops, updates the target environment manifest with the new image tag, commits, and pushes to trigger Argo CD reconciliation.
-
-4. Setup & Execution Steps
-Step 1: Provision Infrastructure (Terraform - Optional if using existing host)
-Bash
 cd terraform
 terraform init
 terraform apply -auto-approve
@@ -65,11 +75,11 @@ kubectl get applications -n argocd
 5. Verifying the Deployment
 1. Application Ingress Endpoints
 Bash
-# Test Production Environment (use 127.0.0.1 for local/WSL, or <NODE_IP> for cloud EC2)
-curl -H "Host: production.app.local" [http://127.0.0.1/](http://127.0.0.1/)
+# Test Production Environment
+curl -H "Host: production.app.local" http://<NODE_IP>/
 
 # Test Staging Environment
-curl -H "Host: staging.app.local" [http://127.0.0.1/](http://127.0.0.1/)
+curl -H "Host: staging.app.local" http://<NODE_IP>/
 2. Argo CD Web UI
 Bash
 kubectl port-forward -n argocd svc/argocd-server 8080:443
@@ -90,6 +100,6 @@ Username: admin
 
 Password: admin
 
-Pod Logs (Loki): In Grafana Explore, select Loki and run {namespace="production"}.
+Pod Logs (Loki): In Grafana Explore, select Loki and query {namespace="production"}.
 
-Metrics (Prometheus): Navigate to Dashboards → Kubernetes / Compute Resources / Workload.
+Metrics (Prometheus): Open the Kubernetes / Compute Resources / Workload dashboard.
