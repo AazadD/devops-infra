@@ -14,9 +14,9 @@ This repository contains the Terraform infrastructure, Ansible automation, and H
 
 ## Prerequisites
 
-- **Terraform** >= 1.5.0
-- **Ansible** >= 2.14
-- **kubectl** & **Helm 3.x**
+- **Terraform** 
+- **Ansible** 
+- **kubectl** & **Helm 
 - Access to an Ubuntu 22.04 LTS server (or AWS EC2 instance)
 
 ---
