@@ -18,22 +18,48 @@
       args:
         creates: /usr/local/bin/k3s
 
-    - name: Create local user .kube directory
+    - name: Wait for K3s kubeconfig to be generated
+      wait_for:
+        path: /etc/rancher/k3s/k3s.yaml
+        state: present
+        timeout: 60
+
+    - name: Detect non-root execution user and home directory
+      set_fact:
+        real_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+        real_home: "{{ '/home/' + ansible_env.SUDO_USER if ansible_env.SUDO_USER is defined else ansible_env.HOME }}"
+
+    - name: Ensure target user .kube directory exists
       file:
-        path: "{{ lookup('env', 'HOME') }}/.kube"
+        path: "{{ real_home }}/.kube"
         state: directory
-        owner: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
-        group: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+        owner: "{{ real_user }}"
+        group: "{{ real_user }}"
         mode: '0755'
 
-    - name: Copy K3s kubeconfig to user .kube directory
+    - name: Force write fresh K3s kubeconfig to user directory
       copy:
         src: /etc/rancher/k3s/k3s.yaml
-        dest: "{{ lookup('env', 'HOME') }}/.kube/config"
+        dest: "{{ real_home }}/.kube/config"
         remote_src: true
-        owner: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
-        group: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+        owner: "{{ real_user }}"
+        group: "{{ real_user }}"
         mode: '0600'
+        force: true
+
+    - name: Configure system-wide KUBECONFIG profile script
+      copy:
+        dest: /etc/profile.d/k3s_kubeconfig.sh
+        content: |
+          export KUBECONFIG="{{ real_home }}/.kube/config"
+        mode: '0644'
+
+    - name: Ensure user .bashrc exports current KUBECONFIG
+      lineinfile:
+        path: "{{ real_home }}/.bashrc"
+        regexp: '^export KUBECONFIG='
+        line: 'export KUBECONFIG="{{ real_home }}/.kube/config"'
+        state: present
 
     - name: Install Helm 3
       shell: curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
