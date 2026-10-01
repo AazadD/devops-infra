@@ -18,12 +18,22 @@
       args:
         creates: /usr/local/bin/k3s
 
-    - name: Configure local kubeconfig
-      shell: |
-        mkdir -p $HOME/.kube
-        cp /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
-        chown $(id -u):$(id -g) $HOME/.kube/config
-      become: false
+    - name: Create local user .kube directory
+      file:
+        path: "{{ lookup('env', 'HOME') }}/.kube"
+        state: directory
+        owner: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+        group: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+        mode: '0755'
+
+    - name: Copy K3s kubeconfig to user .kube directory
+      copy:
+        src: /etc/rancher/k3s/k3s.yaml
+        dest: "{{ lookup('env', 'HOME') }}/.kube/config"
+        remote_src: true
+        owner: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+        group: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+        mode: '0600'
 
     - name: Install Helm 3
       shell: curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
@@ -32,7 +42,8 @@
 
     - name: Add Argo CD Helm repository
       shell: helm repo add argo https://argoproj.github.io/argo-helm && helm repo update
-      become: false
+      environment:
+        KUBECONFIG: /etc/rancher/k3s/k3s.yaml
 
     - name: Install Argo CD via Helm
       shell: |
@@ -41,4 +52,5 @@
           --create-namespace \
           --set server.extraArgs="{--insecure}" \
           --wait
-      become: false
+      environment:
+        KUBECONFIG: /etc/rancher/k3s/k3s.yaml
