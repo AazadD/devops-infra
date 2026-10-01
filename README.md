@@ -31,11 +31,11 @@ Located at `.github/workflows/ci-cd.yaml` in the **Application Repository**, the
 
 ## 3. Prerequisites
 
-- **Terraform** >= 1.5.0
-- **Ansible** >= 2.14
+- **Terraform** 
+- **Ansible** 
 - **kubectl** & **Helm 3.x**
 - Access to an Ubuntu 22.04 LTS host or AWS EC2 instance
-=======
+
 - **Terraform** 
 - **Ansible** 
 - **kubectl** & **Helm 
