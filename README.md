@@ -50,7 +50,6 @@ terraform apply -auto-approve
  Local Offline Syntax & Structure Validation
 
 ```bash
-# 2. Syntax and internal consistency validation
 terraform validate
 ```
 Output 
