@@ -47,6 +47,17 @@ cd terraform
 terraform init
 terraform apply -auto-approve
 ```
+ Local Offline Syntax & Structure Validation
+
+```bash
+# 2. Syntax and internal consistency validation
+terraform validate
+```
+Output 
+
+Success! The configuration is valid.
+
+
 Note the public IP address from the Terraform output.
 
 Step 2: Configure Node & Install Kubernetes (Ansible)
