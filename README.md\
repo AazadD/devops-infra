@@ -61,6 +61,7 @@ Verify cluster status:
 ```Bash
 kubectl get nodes
 ```
+
 Step 3: Bootstrap GitOps (Argo CD App-of-Apps)
 Deploy the root application to synchronize all environments and the observability stack:
 
@@ -75,20 +76,18 @@ kubectl get applications -n argocd
 5. Verifying the Deployment
 1. Application Ingress Endpoints
 
-```Bash
 # Test Production Environment
 curl -H "Host: production.app.local" http://<NODE_IP>/
-```
+
 # Test Staging Environment
-```bash
 curl -H "Host: staging.app.local" http://<NODE_IP>/
-```
 
 2. Argo CD Web UI
 ```Bash
 kubectl port-forward -n argocd svc/argocd-server 8080:443
-URL: https://localhost:8080
 ```
+URL: https://localhost:8080
+
 Username: admin
 
 Password:
@@ -96,12 +95,12 @@ Password:
 ```Bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
-
 3. Observability Dashboard (Grafana, Prometheus & Loki)
 ```Bash
 kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80
-URL: http://localhost:3000
 ```
+URL: http://localhost:3000
+
 Username: admin
 
 Password: admin
