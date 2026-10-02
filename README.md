@@ -119,3 +119,34 @@ Password: admin
 Pod Logs (Loki): In Grafana Explore, select Loki and query {namespace="production"}.
 
 Metrics (Prometheus): Open the Kubernetes / Compute Resources / Workload dashboard.
+
+5. Verification & Proof of Deployment
+1. Continuous Integration & Artifact Delivery (GitHub Actions & Docker Hub)
+Staging Pipeline Run:
+
+Production Pipeline Run:
+
+GitHub Environments Configuration:
+
+GitHub Secrets Configuration:
+
+Docker Hub Images & Tags:
+
+2. Infrastructure as Code & Configuration Management
+Terraform Validation:
+
+Ansible Playbook Execution:
+
+Helm Chart Linting & Packaging:
+
+3. GitOps Continuous Delivery (Argo CD)
+Root App-of-Apps Dashboard (All Healthy & Synced):
+
+Production Workload Resource Tree:
+
+4. Workload Runtime & Observability Verification
+Terminal Verification of Cluster Workloads & Ingress:
+
+Log Aggregation via Grafana Loki & Alloy:
+
+Cluster & Workload Metrics via Prometheus:
