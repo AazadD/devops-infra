@@ -140,53 +140,53 @@ Cluster & Workload Metrics via Prometheus
 
 ### 1. Continuous Integration & Artifact Delivery (GitHub Actions & Docker Hub)
 
-#### Staging Pipeline Run
+#### Staging CI Pipeline (GitHub Actions)
 ![Staging Pipeline](docs/images/01-ci-staging-pipeline.png)
 
-#### Production Pipeline Run
+#### Production CI Pipeline (GitHub Actions)
 ![Production Pipeline](docs/images/02-ci-production-pipeline.png)
 
-#### GitHub Environments Configuration
+#### GitHub Environments Configuration (Staging & Production)
 ![GitHub Environments](docs/images/03-github-environments.png)
 
-#### GitHub Secrets Configuration
+#### GitHub Secrets & Variables Configuration
 ![GitHub Secrets](docs/images/04-github-secrets.png)
 
-#### Docker Hub Images & Tags
+#### Docker Hub Repositories & Build Tags
 ![Docker Hub Tags](docs/images/05-dockerhub-tags.png)
 
 ---
 
-### 2. Infrastructure as Code & Configuration Management
+### 2. Infrastructure as Code & Helm Packaging
 
-#### Terraform Validation
+#### Terraform Syntax & Configuration Validation
 ![Terraform Validation](docs/images/06-terraform-validation.png)
 
-#### Ansible Playbook Execution
+#### Ansible Playbook Execution & K3s Setup
 ![Ansible Playbook](docs/images/07-ansible-execution.png)
 
-#### Helm Chart Linting & Packaging
+#### Helm Chart Linting (`helm lint ~/devops-infra/helm/app-chart`)
 ![Helm Lint](docs/images/08-helm-lint.png)
 
 ---
 
 ### 3. GitOps Continuous Delivery (Argo CD)
 
-#### Root App-of-Apps Dashboard (All Healthy & Synced)
-![Argo CD Root Dashboard](docs/images/09-argocd-root-dashboard.png)
+#### Argo CD Applications Dashboard (All 6 Applications Healthy & Synced)
+![Argo CD Applications Dashboard](docs/images/09-argocd-root-dashboard.png)
 
-#### Production Workload Resource Tree
-![Argo CD Production App](docs/images/10-argocd-production-app.png)
+#### Argo CD Production Workload Resource Topology (Deployment, HPA, Ingress, Pods)
+![Argo CD Production App Resources](docs/images/10-argocd-production-app.png)
 
 ---
 
 ### 4. Workload Runtime & Observability Verification
 
-#### Terminal Verification of Cluster Workloads & Ingress
+#### Cluster Runtime Verification (Nodes, Pods, Services & Ingress Endpoints)
 ![Workload Terminal Verification](docs/images/11-workload-terminal-verification.png)
 
-#### Log Aggregation via Grafana Loki & Alloy
+#### Grafana Loki & Alloy Log Stream (`{namespace="production"}`)
 ![Grafana Loki Logs](docs/images/12-grafana-loki-logs.png)
 
-#### Cluster & Workload Metrics via Prometheus
+#### Grafana Prometheus Metrics (Kubernetes Compute Resources / Workload)
 ![Grafana Prometheus Metrics](docs/images/13-grafana-prometheus-metrics.png)
