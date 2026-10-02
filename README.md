@@ -135,3 +135,58 @@ Production Workload Resource Tree
 Terminal Verification of Cluster Workloads & Ingress
 Log Aggregation via Grafana Loki & Alloy
 Cluster & Workload Metrics via Prometheus
+
+## 6. Verification & Proof of Deployment
+
+### 1. Continuous Integration & Artifact Delivery (GitHub Actions & Docker Hub)
+
+#### Staging Pipeline Run
+![Staging Pipeline](docs/images/01-ci-staging-pipeline.png)
+
+#### Production Pipeline Run
+![Production Pipeline](docs/images/02-ci-production-pipeline.png)
+
+#### GitHub Environments Configuration
+![GitHub Environments](docs/images/03-github-environments.png)
+
+#### GitHub Secrets Configuration
+![GitHub Secrets](docs/images/04-github-secrets.png)
+
+#### Docker Hub Images & Tags
+![Docker Hub Tags](docs/images/05-dockerhub-tags.png)
+
+---
+
+### 2. Infrastructure as Code & Configuration Management
+
+#### Terraform Validation
+![Terraform Validation](docs/images/06-terraform-validation.png)
+
+#### Ansible Playbook Execution
+![Ansible Playbook](docs/images/07-ansible-execution.png)
+
+#### Helm Chart Linting & Packaging
+![Helm Lint](docs/images/08-helm-lint.png)
+
+---
+
+### 3. GitOps Continuous Delivery (Argo CD)
+
+#### Root App-of-Apps Dashboard (All Healthy & Synced)
+![Argo CD Root Dashboard](docs/images/09-argocd-root-dashboard.png)
+
+#### Production Workload Resource Tree
+![Argo CD Production App](docs/images/10-argocd-production-app.png)
+
+---
+
+### 4. Workload Runtime & Observability Verification
+
+#### Terminal Verification of Cluster Workloads & Ingress
+![Workload Terminal Verification](docs/images/11-workload-terminal-verification.png)
+
+#### Log Aggregation via Grafana Loki & Alloy
+![Grafana Loki Logs](docs/images/12-grafana-loki-logs.png)
+
+#### Cluster & Workload Metrics via Prometheus
+![Grafana Prometheus Metrics](docs/images/13-grafana-prometheus-metrics.png)
