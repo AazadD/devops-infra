@@ -82,36 +82,34 @@ Verify application status:
 ```Bash
 kubectl get applications -n argocd
 ```
-5. Verifying the Deployment
-1. Application Ingress Endpoints
 
-```Bash
+
+## 5. Verifying the Deployment
+### 1. Application Ingress Endpoints
+Bash
 # Test Production Environment
+```bash 
 curl -H "Host: production.app.local" http://<NODE_IP>/
-```
+
 # Test Staging Environment
-```bash
 curl -H "Host: staging.app.local" http://<NODE_IP>/
 ```
-
 2. Argo CD Web UI
-```Bash
+Bash
 kubectl port-forward -n argocd svc/argocd-server 8080:443
 URL: https://localhost:8080
-```
+
 Username: admin
 
 Password:
 
-```Bash
+Bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-```
-
 3. Observability Dashboard (Grafana, Prometheus & Loki)
-```Bash
+Bash
 kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80
 URL: http://localhost:3000
-```
+
 Username: admin
 
 Password: admin
@@ -120,33 +118,21 @@ Pod Logs (Loki): In Grafana Explore, select Loki and query {namespace="productio
 
 Metrics (Prometheus): Open the Kubernetes / Compute Resources / Workload dashboard.
 
-5. Verification & Proof of Deployment
+## 6. Verification & Proof of Deployment
 1. Continuous Integration & Artifact Delivery (GitHub Actions & Docker Hub)
-Staging Pipeline Run:
-
-Production Pipeline Run:
-
-GitHub Environments Configuration:
-
-GitHub Secrets Configuration:
-
-Docker Hub Images & Tags:
-
+Staging Pipeline Run
+Production Pipeline Run
+GitHub Environments Configuration
+GitHub Secrets Configuration
+Docker Hub Images & Tags
 2. Infrastructure as Code & Configuration Management
-Terraform Validation:
-
-Ansible Playbook Execution:
-
-Helm Chart Linting & Packaging:
-
+Terraform Validation
+Ansible Playbook Execution
+Helm Chart Linting & Packaging
 3. GitOps Continuous Delivery (Argo CD)
-Root App-of-Apps Dashboard (All Healthy & Synced):
-
-Production Workload Resource Tree:
-
+Root App-of-Apps Dashboard (All Healthy & Synced)
+Production Workload Resource Tree
 4. Workload Runtime & Observability Verification
-Terminal Verification of Cluster Workloads & Ingress:
-
-Log Aggregation via Grafana Loki & Alloy:
-
-Cluster & Workload Metrics via Prometheus:
+Terminal Verification of Cluster Workloads & Ingress
+Log Aggregation via Grafana Loki & Alloy
+Cluster & Workload Metrics via Prometheus
