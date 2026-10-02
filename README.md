@@ -1,4 +1,4 @@
-# DevOps Infrastructure & GitOps Setup Guide
+# Production-Grade Kubernetes Platform with GitOps, CI/CD & Full Observability
 
 This repository contains the Terraform infrastructure, Ansible automation, Helm charts, and CI/CD workflow specifications for deploying the microservice application and observability stack via Argo CD.
 
@@ -31,7 +31,7 @@ Located at `.github/workflows/ci-cd.yaml` in the **Application Repository**, the
 
 ## 3. Prerequisites
 
-- **Terraform**
+- **Terraform** >= 1.5.0
 - **Ansible**
 - **kubectl** & **Helm 3.x**
 - Access to an Ubuntu 22.04 LTS host (or AWS EC2 instance)
@@ -47,15 +47,12 @@ cd terraform
 terraform init
 terraform apply -auto-approve
 ```
- Local Offline Syntax & Structure Validation
+Local Offline Syntax & Structure Validation:
 
-```bash
+```Bash
 terraform validate
 ```
-Output 
-
-Success! The configuration is valid.
-
+Output: Success! The configuration is valid.
 
 Note the public IP address from the Terraform output.
 
@@ -82,32 +79,34 @@ Verify application status:
 ```Bash
 kubectl get applications -n argocd
 ```
-
-
 ## 5. Verifying the Deployment
-### 1. Application Ingress Endpoints
-Bash
-# Test Production Environment
-```bash 
-curl -H "Host: production.app.local" http://<NODE_IP>/
+1. Application Ingress Endpoints
 
+# Test Production Environment
+```bash
+curl -H "Host: production.app.local" http://<NODE_IP>/
+```
 # Test Staging Environment
+```bash
 curl -H "Host: staging.app.local" http://<NODE_IP>/
 ```
 2. Argo CD Web UI
-Bash
+```Bash
 kubectl port-forward -n argocd svc/argocd-server 8080:443
+```
 URL: https://localhost:8080
 
 Username: admin
 
 Password:
 
-Bash
+```Bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
 3. Observability Dashboard (Grafana, Prometheus & Loki)
-Bash
+```Bash
 kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80
+```
 URL: http://localhost:3000
 
 Username: admin
@@ -118,7 +117,7 @@ Pod Logs (Loki): In Grafana Explore, select Loki and query {namespace="productio
 
 Metrics (Prometheus): Open the Kubernetes / Compute Resources / Workload dashboard.
 
-## 6. Verification & Proof of Deployment
+##6. Verification & Proof of Deployment
 1. Continuous Integration & Artifact Delivery (GitHub Actions & Docker Hub)
 Staging Pipeline Run
 Production Pipeline Run
